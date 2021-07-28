@@ -11,6 +11,10 @@ class ms_iis (
   String $root_file   = 'index.html',
 ){
 
+  file { $root_folder:
+    ensure => 'directory'
+  }
+
   file { "${root_folder}\\${web_folder}":
     ensure => 'directory'
   }
