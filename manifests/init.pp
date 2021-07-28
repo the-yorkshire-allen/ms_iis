@@ -36,6 +36,12 @@ class ms_iis (
     ],
   }
 
+  $iis_features = ['Web-WebServer','Web-Scripting-Tools']
+
+  iis_feature { $iis_features:
+    ensure => 'present',
+  }
+
   # Configure IIS
   iis_application_pool { 'complete_site_app_pool':
     ensure                  => 'present',
