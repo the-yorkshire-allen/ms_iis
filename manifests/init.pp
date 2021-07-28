@@ -6,8 +6,8 @@
 #   include ms_iis
 class ms_iis (
   String $root_folder = 'c:\\inetpub',
-  String $web_folder  = 'web_site',
-  String $root_file   = 'index.html',
+  String $web_folder  = '\\web_site',
+  String $root_file   = '\\index.html',
 ){
   $iis_features = ['Web-WebServer','Web-Scripting-Tools','Web-AppInit']
 
@@ -19,7 +19,7 @@ class ms_iis (
     ensure => 'directory',
   }
 
-  file { "${root_folder}\\${web_folder}":
+  file { "${root_folder}${web_folder}":
     ensure  => 'directory',
     require => File[$root_folder],
   }
@@ -32,7 +32,7 @@ class ms_iis (
 
   iis_site { 'complete':
     ensure           => 'started',
-    physicalpath     => "${root_folder}\\${web_folder}",
+    physicalpath     => "${root_folder}${web_folder}",
     applicationpool  => 'DefaultAppPool',
     enabledprotocols => 'http',
     bindings         => [
@@ -44,20 +44,20 @@ class ms_iis (
     require          => [
       Iis_feature['Web-WebServer'],
       Iis_site['Default Web Site'],
-      File["${root_folder}\\${web_folder}"],
+      File["${root_folder}${web_folder}"],
       File['index']
     ],
   }
 
   file { 'index':
-    path    => "${root_folder}\\${web_folder}\\${root_file}",
+    path    => "${root_folder}${web_folder}${root_file}",
     source  => 'puppet:///modules/ms_iis/index.html',
-    require => File["${root_folder}\\${web_folder}"],
+    require => File["${root_folder}${web_folder}"],
   }
 
   file { 'web.config':
     ensure  => 'file',
-    path    => "${root_folder}\\${web_folder}\\web.config",
-    require => File["${root_folder}\\${web_folder}"],
+    path    => "${root_folder}${web_folder}\\web.config",
+    require => File["${root_folder}${web_folder}"],
   }
 }
