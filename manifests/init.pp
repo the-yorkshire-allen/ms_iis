@@ -9,7 +9,8 @@ class ms_iis (
   String $web_folder  = '\\web_site',
   String $root_file   = '\\index.html',
 ){
-  $iis_features = ['Web-WebServer','Web-Scripting-Tools','Web-AppInit']
+#  $iis_features = ['Web-WebServer','Web-Scripting-Tools','Web-AppInit']
+  $iis_features = ['Web-WebServer']
 
   iis_feature { $iis_features:
     ensure => 'present',
@@ -25,10 +26,10 @@ class ms_iis (
   }
 
   # Delete the default website to prevent a port binding conflict.
-  iis_site {'Default Web Site':
-    ensure  => absent,
-    require => Iis_feature['Web-WebServer'],
-  }
+#  iis_site {'Default Web Site':
+#    ensure  => absent,
+#    require => Iis_feature['Web-WebServer'],
+#  }
 
 #  iis_site { 'complete':
 #    ensure           => 'started',
