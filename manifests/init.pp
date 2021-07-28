@@ -10,7 +10,7 @@ class ms_iis (
   String $vdir_folder = 'web_site_vdir',
   String $root_file   = 'index.html',
 ){
-  $iis_features = ['Web-WebServer','Web-Scripting-Tools']
+  $iis_features = ['Web-WebServer','Web-Scripting-Tools','Web-WebAdministration']
 
   iis_feature { $iis_features:
     ensure => 'present',
@@ -38,12 +38,12 @@ class ms_iis (
 
   #Application Pool No Managed Code .Net CLR Version set up
   iis_application_pool {'test_app_pool':
-      ensure                    => 'present',
-      enable32_bit_app_on_win64 => true,
-      managed_runtime_version   => '',
-      managed_pipeline_mode     => 'Classic',
-      start_mode                => 'AlwaysRunning'
-    }
+    ensure                    => 'present',
+    enable32_bit_app_on_win64 => true,
+    managed_runtime_version   => '',
+    managed_pipeline_mode     => 'Classic',
+    start_mode                => 'AlwaysRunning'
+  }
 
   # Delete the default website to prevent a port binding conflict.
   iis_site {'Default Web Site':
@@ -56,6 +56,12 @@ class ms_iis (
     physicalpath     => "${root_folder}\\${web_folder}",
     applicationpool  => 'complete_site_app_pool',
     enabledprotocols => 'http',
+    bindings         => [
+      {
+        'bindinginformation' => '*:80:',
+        'protocol'           => 'http'
+      }
+    ],
     require          => [
       Iis_feature['Web-WebServer'],
       Iis_site['Default Web Site'],
@@ -68,11 +74,15 @@ class ms_iis (
     ensure       => 'present',
     sitename     => 'complete',
     physicalpath => "${root_folder}\\${vdir_folder}",
-    require      => File["${root_folder}\\${vdir_folder}"],
+    require      => [
+      File["${root_folder}\\${vdir_folder}"],
+      Iis_feature['Web-WebServer']
+    ],
   }
 
   file { 'index':
-    path   => "${root_folder}\\${web_folder}\\${root_file}",
-    source => 'puppet:///modules/ms_iis/index.html',
+    path    => "${root_folder}\\${web_folder}\\${root_file}",
+    source  => 'puppet:///modules/ms_iis/index.html',
+    require => File["${root_folder}\\${web_folder}"],
   }
 }
