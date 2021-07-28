@@ -9,8 +9,8 @@ class ms_iis (
   String $web_folder  = '\\web_site',
   String $root_file   = '\\index.html',
 ){
-#  $iis_features = ['Web-WebServer','Web-Scripting-Tools','Web-AppInit']
-  $iis_features = ['Web-WebServer']
+  $iis_features = ['Web-WebServer','Web-Scripting-Tools','Web-AppInit']
+#  $iis_features = ['Web-WebServer']
 
   iis_feature { $iis_features:
     ensure                   => 'present',
