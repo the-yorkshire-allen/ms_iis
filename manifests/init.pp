@@ -10,6 +10,11 @@ class ms_iis (
   String $vdir_folder = 'web_site_vdir',
   String $root_file   = 'index.html',
 ){
+  $iis_features = ['Web-WebServer','Web-Scripting-Tools']
+
+  iis_feature { $iis_features:
+    ensure => 'present',
+  }
 
   file { $root_folder:
     ensure => 'directory'
@@ -34,12 +39,6 @@ class ms_iis (
     permissions => [
       {'identity' => 'IISCompleteGroup', 'rights' => ['read', 'execute']},
     ],
-  }
-
-  $iis_features = ['Web-WebServer','Web-Scripting-Tools']
-
-  iis_feature { $iis_features:
-    ensure => 'present',
   }
 
   # Configure IIS
