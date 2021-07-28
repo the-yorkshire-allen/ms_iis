@@ -56,7 +56,7 @@ class ms_iis (
   }
 
   file { 'web.config':
-    path    => "${root_folder}\\${web_folder}\\web.config",
+    ensure  => "${root_folder}\\${web_folder}\\web.config",
     require => File["${root_folder}\\${web_folder}"],
   }
 }
