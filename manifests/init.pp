@@ -58,12 +58,23 @@ class ms_iis (
       start_mode                => 'AlwaysRunning'
     }
 
+  # Delete the default website to prevent a port binding conflict.
+  iis_site {'Default Web Site':
+    ensure  => absent,
+    require => Iis_feature['Web-WebServer'],
+  }
+
   iis_site { 'complete':
     ensure           => 'started',
     physicalpath     => "${root_folder}\\${web_folder}",
     applicationpool  => 'complete_site_app_pool',
     enabledprotocols => 'http',
-    require          => [File["${root_folder}\\${web_folder}"],File['index']],
+    require          => [
+      Iis_feature['Web-WebServer'],
+      Iis_site['Default Web Site'],
+      File["${root_folder}\\${web_folder}"],
+      File['index']
+    ],
   }
 
   iis_virtual_directory { 'vdir':
