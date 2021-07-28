@@ -26,10 +26,10 @@ class ms_iis (
   }
 
   # Delete the default website to prevent a port binding conflict.
-#  iis_site {'Default Web Site':
-#    ensure  => absent,
-#    require => Iis_feature['Web-WebServer'],
-#  }
+  iis_site {'Default Web Site':
+    ensure  => absent,
+    require => Iis_feature['Web-WebServer'],
+  }
 
 #  iis_site { 'complete':
 #    ensure           => 'started',
