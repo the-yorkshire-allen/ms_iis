@@ -26,29 +26,29 @@ class ms_iis (
   }
 
   # Delete the default website to prevent a port binding conflict.
-  iis_site {'Default Web Site':
-    ensure  => absent,
-    require => Iis_feature['Web-WebServer'],
-  }
-
-#  iis_site { 'complete':
-#    ensure           => 'started',
-#    physicalpath     => "${root_folder}${web_folder}",
-#    applicationpool  => 'DefaultAppPool',
-#    enabledprotocols => 'http',
-#    bindings         => [
-#      {
-#        'bindinginformation' => '*:80:',
-#        'protocol'           => 'http'
-#      }
-#    ],
-#    require          => [
-#      Iis_feature['Web-WebServer'],
-#      Iis_site['Default Web Site'],
-#      File["${root_folder}${web_folder}"],
-#      File['index']
-#    ],
+#  iis_site {'Default Web Site':
+#    ensure  => absent,
+#    require => Iis_feature['Web-WebServer'],
 #  }
+
+  iis_site { 'complete':
+    ensure           => 'started',
+    physicalpath     => "${root_folder}${web_folder}",
+    applicationpool  => 'DefaultAppPool',
+    enabledprotocols => 'http',
+    bindings         => [
+      {
+        'bindinginformation' => '*:80:',
+        'protocol'           => 'http'
+      }
+    ],
+    require          => [
+      Iis_feature['Web-WebServer'],
+#      Iis_site['Default Web Site'],
+      File["${root_folder}${web_folder}"],
+      File['index']
+    ],
+  }
 
   file { 'index':
     path    => "${root_folder}${web_folder}${root_file}",
