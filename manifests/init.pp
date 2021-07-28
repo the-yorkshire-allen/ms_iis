@@ -5,12 +5,12 @@
 # @example
 #   include ms_iis
 class ms_iis (
-  String $root_folder = 'c:\\inetpub\\',
+  String $root_folder = 'c:\\inetpub',
   String $web_folder  = 'web_site',
   String $vdir_folder = 'web_site_vdir',
   String $root_file   = 'index.html',
 ){
-  $iis_features = ['Web-WebServer','Web-Scripting-Tools','Web-WebAdministration']
+  $iis_features = ['Web-WebServer','Web-Scripting-Tools']
 
   iis_feature { $iis_features:
     ensure => 'present',
@@ -34,15 +34,6 @@ class ms_iis (
     state                   => 'started',
     managed_pipeline_mode   => 'Integrated',
     managed_runtime_version => 'v4.0',
-  }
-
-  #Application Pool No Managed Code .Net CLR Version set up
-  iis_application_pool {'test_app_pool':
-    ensure                    => 'present',
-    enable32_bit_app_on_win64 => true,
-    managed_runtime_version   => '',
-    managed_pipeline_mode     => 'Classic',
-    start_mode                => 'AlwaysRunning'
   }
 
   # Delete the default website to prevent a port binding conflict.
