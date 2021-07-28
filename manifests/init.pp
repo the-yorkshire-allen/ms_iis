@@ -13,7 +13,8 @@ class ms_iis (
   $iis_features = ['Web-WebServer']
 
   iis_feature { $iis_features:
-    ensure => 'present',
+    ensure                   => 'present',
+    include_management_tools => true,
   }
 
   file { $root_folder:
@@ -26,10 +27,10 @@ class ms_iis (
   }
 
   # Delete the default website to prevent a port binding conflict.
-#  iis_site {'Default Web Site':
-#    ensure  => absent,
-#    require => Iis_feature['Web-WebServer'],
-#  }
+  iis_site {'Default Web Site':
+    ensure  => absent,
+    require => Iis_feature['Web-WebServer'],
+  }
 
   iis_site { 'complete':
     ensure           => 'started',
