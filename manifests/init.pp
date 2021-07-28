@@ -74,6 +74,6 @@ class ms_iis (
   file { 'index':
     path    => "${root_folder}/${web_folder}/${root_file}",
     source  => 'puppet:///modules/ms_iis/index.html',
-    require => File["${root_folder}\\${web_folder}"],
+    require => File["${root_folder}/${web_folder}"],
   }
 }
