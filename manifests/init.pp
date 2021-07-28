@@ -5,7 +5,7 @@
 # @example
 #   include ms_iis
 class ms_iis (
-  String $root_folder = 'c:\\inetpub',
+  String $root_folder = 'c:/inetpub',
   String $web_folder  = 'web_site',
   String $vdir_folder = 'web_site_vdir',
   String $root_file   = 'index.html',
@@ -20,11 +20,11 @@ class ms_iis (
     ensure => 'directory'
   }
 
-  file { "${root_folder}\\${web_folder}":
+  file { "${root_folder}/${web_folder}":
     ensure => 'directory'
   }
 
-  file { "${root_folder}\\${vdir_folder}":
+  file { "${root_folder}/${vdir_folder}":
     ensure => 'directory'
   }
 
@@ -44,7 +44,7 @@ class ms_iis (
 
   iis_site { 'complete':
     ensure           => 'started',
-    physicalpath     => "${root_folder}\\${web_folder}",
+    physicalpath     => "${root_folder}/${web_folder}",
     applicationpool  => 'complete_site_app_pool',
     enabledprotocols => 'http',
     bindings         => [
@@ -56,7 +56,7 @@ class ms_iis (
     require          => [
       Iis_feature['Web-WebServer'],
       Iis_site['Default Web Site'],
-      File["${root_folder}\\${web_folder}"],
+      File["${root_folder}/${web_folder}"],
       File['index']
     ],
   }
@@ -64,15 +64,15 @@ class ms_iis (
   iis_virtual_directory { 'vdir':
     ensure       => 'present',
     sitename     => 'complete',
-    physicalpath => "${root_folder}\\${vdir_folder}",
+    physicalpath => "${root_folder}/${vdir_folder}",
     require      => [
-      File["${root_folder}\\${vdir_folder}"],
+      File["${root_folder}/${vdir_folder}"],
       Iis_feature['Web-WebServer']
     ],
   }
 
   file { 'index':
-    path    => "${root_folder}\\${web_folder}\\${root_file}",
+    path    => "${root_folder}/${web_folder}/${root_file}",
     source  => 'puppet:///modules/ms_iis/index.html',
     require => File["${root_folder}\\${web_folder}"],
   }
