@@ -28,19 +28,6 @@ class ms_iis (
     ensure => 'directory'
   }
 
-  # Set Permissions
-  acl { "${root_folder}\\${web_folder}":
-    permissions => [
-      {'identity' => 'IISCompleteGroup', 'rights' => ['read', 'execute']},
-    ],
-  }
-
-  acl { "${root_folder}\\${vdir_folder}":
-    permissions => [
-      {'identity' => 'IISCompleteGroup', 'rights' => ['read', 'execute']},
-    ],
-  }
-
   # Configure IIS
   iis_application_pool { 'complete_site_app_pool':
     ensure                  => 'present',
