@@ -10,7 +10,6 @@ class ms_iis (
   String $root_file   = '\\index.html',
 ){
   $iis_features = ['Web-WebServer','Web-Scripting-Tools','Web-AppInit']
-#  $iis_features = ['Web-WebServer']
 
   iis_feature { $iis_features:
     ensure                   => 'present',
@@ -45,9 +44,10 @@ class ms_iis (
     ],
     require          => [
       Iis_feature['Web-WebServer'],
-#      Iis_site['Default Web Site'],
+      Iis_site['Default Web Site'],
       File["${root_folder}${web_folder}"],
-      File['index']
+      File['index'],
+      File['web.config']
     ],
   }
 
