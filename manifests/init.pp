@@ -60,6 +60,7 @@ class ms_iis (
   file { 'web.config':
     ensure  => 'file',
     path    => "${root_folder}${web_folder}\\web.config",
+    source  => 'puppet:///modules/ms_iis/web.config',
     require => File["${root_folder}${web_folder}"],
   }
 }
